@@ -1,0 +1,60 @@
+%class AppClass
+
+%start MainMap::Start
+
+%map MainMap
+%%
+Default {
+	start			Start	    { ClearSMC(); }
+	letter(c: String)       Error       { Unacceptable(); }
+	digit(c: String)        Error       { Unacceptable(); }
+	space                   Error       { Unacceptable(); }
+	equal           	Error       { Unacceptable(); }
+	EOS             	Error       { Unacceptable(); }
+	unknown         	Error       { Unacceptable(); }
+	operation       	Error       { Unacceptable(); }
+}
+
+Start {
+	letter(c: String) [ ctxt.is_valid_type() ]	 nil	 { counter_inc(); add_to_type_string(c);} 
+	// заносить в буфер
+	space  [ ctxt.check_type() ]	 Space   { counter_zero();}
+}
+
+Space {
+	letter(c: String)		LitName		{ counter_inc(); add_to_name_string(c);}
+}
+
+LitName {
+	letter(c: String) [ ctxt.is_valid_name() ]  	 nil   { counter_inc(); add_to_name_string(c);} 
+	// если lit_flag = false в name string, иначе в другой временный буфер
+	digit(c: String)  [ ctxt.is_valid_name() ] 	 nil   { counter_inc(); add_to_name_string(c);}
+	equal 	   [ ctxt.check_lit_flag_false()]	 EqOp  { set_lit_flag(); counter_zero();}
+	operation  [ ctxt.check_lit_flag_true() and ctxt.check_op_flag_false() and ctxt.check_vocab()]	EqOp 						   { set_op_flag(); counter_zero(); clear_tmp_name_string();}
+	EOS 	   [ ctxt.check_lit_flag_true() and ctxt.check_vocab()]  OK {Acceptable(); add_to_vocab();} 
+	// add to vocab type and name one 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								} 
+}
+
+EqOp {
+	letter(c: String) 	LitName		{counter_inc(); add_to_name_string(c);}
+	digit(c: String)	LitDig 		{}
+}
+
+LitDig {
+	operation  [ ctxt.check_op_flag_false()]	EqOp 	 { set_op_flag();}
+	EOS						OK 	 { Acceptable(); add_to_vocab();} 
+	digit(c: String)				LitDig	 {}
+}
+
+OK {
+        EOS		nil	    	{ Acceptable();} //add to vocab?
+}
+
+Error {
+	EOS		nil		{Unacceptable();}
+}
+
+%%
+
+
+
