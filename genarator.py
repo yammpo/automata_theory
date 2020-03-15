@@ -42,8 +42,8 @@ def str_two():
 	s5 = rand_func_3()
 	return (s1 + s2 + '=' + s3 + s4 + s5 + '\n')
 
-with open('generated.txt', 'w') as f:
-	for _ in range(1000000):
+with open('generated_1000.txt', 'w') as f:
+	for _ in range(1000):
 		rand_func = choice((str_one, str_two))
 		s = rand_func()
 		f.write(s)
