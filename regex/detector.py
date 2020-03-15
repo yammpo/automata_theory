@@ -1,5 +1,6 @@
 import re
 import sys
+import time
 
 vocab = dict() #имя - ключ, тип - значение
 
@@ -35,6 +36,7 @@ def check_conflicts(rex):
 def from_file():
 	f = open('generated_1000.txt', 'r')
 	res = open('results.txt', 'w')
+	start = time.time()
 	for line in f.readlines():
 		rex = re.fullmatch(tmpl, line[:-1])
 		if rex is not None and check_vocab(rex):
@@ -45,9 +47,13 @@ def from_file():
 				res.write('\n')
 		else:
 			res.write(line + ' NOT OK ' + '\n')
+	end = time.time()
+	with open('time.txt', 'w') as tm:
+		tm.write(str(end-start))
 	f.close()
 	
 def from_console():# Ctrl + D to stop
+	start = time.time()
 	for line in sys.stdin:
 		rex = re.fullmatch(tmpl, line[:-1])
 		if rex is not None and check_vocab(rex):
@@ -56,6 +62,9 @@ def from_console():# Ctrl + D to stop
 				print('conflict: ' + rex[2] + ' initial type is ' + vocab[rex[2]])
 		else:
 			print('NOT OK')
+	end = time.time()
+	with open('time.txt', 'w') as f:
+		f.write(str(end-start))
 
 print('which text to recognize?(f - from file, c - from consol)')
 flag = input()

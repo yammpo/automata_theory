@@ -1,10 +1,12 @@
 import AppClass
 import sys
+import time
 
 def from_file():
 	recognizer = AppClass.AppClass()
 	f = open('generated_1000.txt', 'r')
 	res = open('results.txt', 'w')
+	start = time.time()
 	for line in f.readlines():
 		match = recognizer.CheckString(line)
 		if match:
@@ -16,9 +18,13 @@ def from_file():
 				res.write('\n')
 		else:
 			res.write(line + ' NOT OK ' + '\n')
+	end = time.time()
+	with open('time.txt', 'w') as tm:
+		tm.write(str(end-start))
 	f.close()
 
 def from_console():# Ctrl + D to stop
+	start = time.time()
 	recognizer = AppClass.AppClass()
 	for line in sys.stdin:
 		match = recognizer.CheckString(line[:-1])
@@ -30,6 +36,9 @@ def from_console():# Ctrl + D to stop
 			
 		else:
 			print('NOT OK')
+	end = time.time()
+	with open('time.txt', 'w') as f:
+		f.write(str(end-start))
 
 print('which text to recognize?(f - from file, c - from consol)')
 flag = input()
