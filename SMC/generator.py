@@ -58,10 +58,10 @@ class Generator:
 		for i in range(len(self._names)):
     			print(i, self._names[i])
 
-detector = Generator()
-detector.full_the_names()
-detector.generate('generated_1000.txt', 1000)
-detector.show_names()
+#detector = Generator()
+#detector.full_the_names()
+#detector.generate('generated_1000.txt', 1000)
+#detector.show_names()
 
 
 

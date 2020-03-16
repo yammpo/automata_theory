@@ -1,10 +1,11 @@
 import AppClass
 import sys
 import time
+import generator
 
 def from_file():
 	recognizer = AppClass.AppClass()
-	f = open('generated_1000.txt', 'r')
+	f = open('generated_10000.txt', 'r')
 	res = open('results.txt', 'w')
 	start = time.time()
 	for line in f.readlines():
@@ -43,7 +44,18 @@ def from_console():# Ctrl + D to stop
 print('which text to recognize?(f - from file, c - from consol)')
 flag = input()
 if flag == 'f':
-	from_file()
+	print('generate new file or use early generated?(n - new, o - old)')
+	flag_two = input()
+	if flag_two == 'n':
+		detector = generator.Generator()
+		detector.full_the_names()
+		detector.generate('generated_10000.txt', 10000)
+		#detector.show_names()
+		from_file()
+	elif flag_two == 'o':
+		from_file()
+	else:
+		print('error input, try again')
 elif flag == 'c':
 	from_console()
 else:
