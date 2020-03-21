@@ -1,0 +1,122 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> string
+Rule 1     string -> long_string
+Rule 2     string -> short_string
+Rule 3     long_string -> TYPE NAME EQUAL LITERAL OPERATION LITERAL NL
+Rule 4     short_string -> TYPE NAME EQUAL LITERAL NL
+
+Terminals, with rules where they appear
+
+EQUAL                : 3 4
+LITERAL              : 3 3 4
+NAME                 : 3 4
+NL                   : 3 4
+OPERATION            : 3
+TYPE                 : 3 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+long_string          : 1
+short_string         : 2
+string               : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . string
+    (1) string -> . long_string
+    (2) string -> . short_string
+    (3) long_string -> . TYPE NAME EQUAL LITERAL OPERATION LITERAL NL
+    (4) short_string -> . TYPE NAME EQUAL LITERAL NL
+
+    TYPE            shift and go to state 4
+
+    string                         shift and go to state 1
+    long_string                    shift and go to state 2
+    short_string                   shift and go to state 3
+
+state 1
+
+    (0) S' -> string .
+
+
+
+state 2
+
+    (1) string -> long_string .
+
+    $end            reduce using rule 1 (string -> long_string .)
+
+
+state 3
+
+    (2) string -> short_string .
+
+    $end            reduce using rule 2 (string -> short_string .)
+
+
+state 4
+
+    (3) long_string -> TYPE . NAME EQUAL LITERAL OPERATION LITERAL NL
+    (4) short_string -> TYPE . NAME EQUAL LITERAL NL
+
+    NAME            shift and go to state 5
+
+
+state 5
+
+    (3) long_string -> TYPE NAME . EQUAL LITERAL OPERATION LITERAL NL
+    (4) short_string -> TYPE NAME . EQUAL LITERAL NL
+
+    EQUAL           shift and go to state 6
+
+
+state 6
+
+    (3) long_string -> TYPE NAME EQUAL . LITERAL OPERATION LITERAL NL
+    (4) short_string -> TYPE NAME EQUAL . LITERAL NL
+
+    LITERAL         shift and go to state 7
+
+
+state 7
+
+    (3) long_string -> TYPE NAME EQUAL LITERAL . OPERATION LITERAL NL
+    (4) short_string -> TYPE NAME EQUAL LITERAL . NL
+
+    OPERATION       shift and go to state 8
+    NL              shift and go to state 9
+
+
+state 8
+
+    (3) long_string -> TYPE NAME EQUAL LITERAL OPERATION . LITERAL NL
+
+    LITERAL         shift and go to state 10
+
+
+state 9
+
+    (4) short_string -> TYPE NAME EQUAL LITERAL NL .
+
+    $end            reduce using rule 4 (short_string -> TYPE NAME EQUAL LITERAL NL .)
+
+
+state 10
+
+    (3) long_string -> TYPE NAME EQUAL LITERAL OPERATION LITERAL . NL
+
+    NL              shift and go to state 11
+
+
+state 11
+
+    (3) long_string -> TYPE NAME EQUAL LITERAL OPERATION LITERAL NL .
+
+    $end            reduce using rule 3 (long_string -> TYPE NAME EQUAL LITERAL OPERATION LITERAL NL .)
+
